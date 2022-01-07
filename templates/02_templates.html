@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>First Template Example</title>
+</head>
+<body>
+<h1>This is how {{name}} works</h1>
+
+How to use an Array:
+<p>
+    {% for month  in months %}
+        {{loop.index}} : {{ month }}
+        {% if not loop.last %}
+        -
+        {% endif %}
+    {% endfor %}
+</p>
+
+How to use Dictionary:
+
+<ul>
+{% for key, value in dict.items() %}
+    <li><b>{{ key }}</b>: {{ value}}</li>
+{% endfor %}
+</ul>
+
+</body>
+</html>
