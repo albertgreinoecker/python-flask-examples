@@ -5,6 +5,7 @@ app = Flask(__name__)
 api = Api(app) #Die Flask API
 
 #Jede resource muss von der Klasse Resource erben. Alle HTTP-Methoden werden hier auf Python-Methoden abgebildet
+
 class SimpleClass(Resource):
     def get(self):
         return {'param1': 'HELLO',
@@ -29,6 +30,8 @@ class SimpleNameScore(Resource):
     def delete(self, name):
         name_score[name] = None
         return {"Message": "%s gelöscht" % name}
+    def patch(self, name):
+        name_score[name]
 
 #Hier passiert das Mapping auf die Klasse
 api.add_resource(SimpleClass, '/')
