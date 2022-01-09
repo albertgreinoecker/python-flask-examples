@@ -23,15 +23,18 @@ class SimpleNameScore(Resource):
 
     def put(self, name):
         existing = name in name_score
-        name_score[name] = request.form['data']
+        name_score[name] = request.form['score']
         if existing:
             return {"Message" : "Überschrieben"}
         return {"Message" : "Neu hinzugefügt"}
+
     def delete(self, name):
-        name_score[name] = None
+        del name_score[name]
         return {"Message": "%s gelöscht" % name}
-    def patch(self, name):
-        name_score[name]
+
+    def patch(self, name): #Hier das gleiche wie put, weil ja nur ein Attribut (score) vorhanden ist
+        name_score[name] = request.form['score']
+        return {"Message": "%s gepatched" % name}
 
 #Hier passiert das Mapping auf die Klasse
 api.add_resource(SimpleClass, '/')
@@ -42,4 +45,4 @@ if __name__ == '__main__':
 
 
 #Aufrufe für SimpleNameScore
-# curl http://localhost:5000/score/albert -d "data=100" -X PUT
+# curl http://localhost:5000/score/albert -d "score=100" -X PUT
