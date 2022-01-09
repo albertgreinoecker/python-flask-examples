@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>How to cope with a session</title>
+</head>
+<body>
+<h1>Demo for session storing objects</h1>
+
+<h1>{{question.text}}</h1>
+
+{% for answer  in question.answers %}
+    <a href="/question/{{loop.index}}">{{answer}}</a>
+{% endfor %}
+
+<br/>
+
+{% if feedback %}
+    Last Question: {{feedback}}
+{% endif %}
+</body>
+</html>
