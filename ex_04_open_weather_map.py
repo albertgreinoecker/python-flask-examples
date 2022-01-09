@@ -1,6 +1,9 @@
 
 import requests
 import json
+
+from samba.dcerpc.dcerpc import response
+
 import ids
 
 
@@ -54,8 +57,25 @@ Ein mögliches Ergebnis für obigen Aufruf
 '''
 if __name__ == '__main__':
     response = requests.get(url).json()
+    # Formatierte Ausgabe
+    print(json.dumps(response, indent=4, sort_keys=False))
+    #Schreiben in eine Datei
+    with open('/tmp/data.json', 'w') as outfile:
+        json.dump(response, outfile)
+
+    #Laden von JSON aus einer Datei
+    with open('/tmp/data.json') as json_file:
+        data = json.load(json_file)
+    print (data)
+
+
+    # Einfache Abfragen
     longitude = response["coord"]["lon"]
     print (longitude)
 
     description = response["weather"][0]["description"]
     print(description)
+
+
+    #Es gibt noch die Methoden
+    # * loads: Einlesen von JSON aus einem String (das s steht wie bei dumps für einen String
