@@ -2,8 +2,6 @@
 import requests
 import json
 
-from samba.dcerpc.dcerpc import response
-
 import ids
 
 
