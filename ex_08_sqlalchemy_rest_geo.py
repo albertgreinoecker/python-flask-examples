@@ -6,6 +6,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql.expression import func
 from flask_restful import Resource, Api
 from dataclasses import dataclass
+import json
 
 Base = declarative_base()  # Basisklasse aller in SQLAlchemy verwendeten Klassen
 metadata = Base.metadata
@@ -39,9 +40,9 @@ class GeoInfoREST(Resource):
         return {"Message": "Stored"}
 
     def put(self, id):
-        data = request.form['info']
+        data = json.loads(request.form['info'])
         print(data)
-        info = GeoInfo(long=12, lat=14, message='aaa')
+        info = GeoInfo(long=data['long'], lat=data['lat'], message=data['message'])
         db_session.add(info)
         db_session.flush()
         return jsonify(info)
@@ -49,7 +50,6 @@ class GeoInfoREST(Resource):
 class GeoInfosRESTs(Resource):
     def get(self):
         infos = GeoInfo.query.all()
-        print(infos)
         return jsonify(infos)
 
 
