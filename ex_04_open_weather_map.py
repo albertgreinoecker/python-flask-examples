@@ -55,6 +55,7 @@ Ein mögliches Ergebnis für obigen Aufruf
 '''
 if __name__ == '__main__':
     response = requests.get(url).json()
+    print(response)
     # Formatierte Ausgabe
     print(json.dumps(response, indent=4, sort_keys=False))
     #Schreiben in eine Datei
