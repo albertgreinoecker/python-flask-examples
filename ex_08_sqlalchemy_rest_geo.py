@@ -42,10 +42,34 @@ class GeoInfoREST(Resource):
     def put(self, id):
         data = json.loads(request.form['info'])
         print(data)
-        info = GeoInfo(long=data['long'], lat=data['lat'], message=data['message'])
+        info = GeoInfo(name=data['name'], long=data['long'], lat=data['lat'], message=data['message'])
         db_session.add(info)
         db_session.flush()
         return jsonify(info)
+    def delete(self,id):
+        info = GeoInfo.query.get(id)
+        if info is None:
+            return jsonify({'message': 'object with id %d does not exist' % id})
+        db_session.delete(info)
+        db_session.flush()
+        return jsonify({'message': '%d deleted' % id})
+
+    def patch(self, id):
+        info = GeoInfo.query.get(id)
+        if info is None:
+            return jsonify({'message': 'object with id %d does not exist' % id})
+        data = json.loads(request.form['info'])
+        if 'name' in data:
+            info.name = data['name']
+        if 'long' in data:
+            info.long = data['long']
+        if 'lat' in data:
+            info.lat = data['lat']
+        if 'message' in data:
+            info.message = data['message']
+        db_session.add(info)
+        db_session.flush()
+        return jsonify({'message': 'object with id %d modified' % id})
 
 class GeoInfosRESTs(Resource):
     def get(self):
