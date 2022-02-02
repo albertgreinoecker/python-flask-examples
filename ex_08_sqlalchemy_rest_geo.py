@@ -40,7 +40,7 @@ class GeoInfoREST(Resource):
         return {"Message": "Stored"}
 
     def put(self, id):
-        data = json.loads(request.form['info'])
+        data = json.loads(request.json['info'])
         print(data)
         info = GeoInfo(name=data['name'], long=data['long'], lat=data['lat'], message=data['message'])
         db_session.add(info)
