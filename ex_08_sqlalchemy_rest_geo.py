@@ -37,8 +37,8 @@ class GeoInfo(Base):
 
 class GeoInfoREST(Resource):
     def get(self, id):
-        return {"Message": "Stored"}
-
+        info = GeoInfo.query.get(id)
+        return jsonify(info)
     def put(self, id):
         data = json.loads(request.json['info'])
         print(data)
@@ -58,7 +58,7 @@ class GeoInfoREST(Resource):
         info = GeoInfo.query.get(id)
         if info is None:
             return jsonify({'message': 'object with id %d does not exist' % id})
-        data = json.loads(request.form['info'])
+        data = json.loads(request.json['info'])
         if 'name' in data:
             info.name = data['name']
         if 'long' in data:
