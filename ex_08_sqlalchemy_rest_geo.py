@@ -40,7 +40,7 @@ class GeoInfoREST(Resource):
         info = GeoInfo.query.get(id)
         return jsonify(info)
     def put(self, id):
-        data = json.loads(request.json['info'])
+        data = request.get_json(force=True)['info']
         print(data)
         info = GeoInfo(name=data['name'], long=data['long'], lat=data['lat'], message=data['message'])
         db_session.add(info)
