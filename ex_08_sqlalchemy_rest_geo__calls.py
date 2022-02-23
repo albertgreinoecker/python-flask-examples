@@ -25,6 +25,6 @@ print(response.json())
 
 
 # j = json.dumps({'message' : 'modified message'})
-# response = requests.patch('http://localhost:5000/geoinfo/5' , data={'info' : j})
+# response = requests.patch('http://localhost:5000/geoinfo/5' , json={'info' : j})
 # print(response)
 # print(response.json())
