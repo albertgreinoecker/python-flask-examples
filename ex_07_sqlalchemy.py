@@ -1,7 +1,7 @@
 # Declarative-Variante wird hier benutzt
-from flask import Flask, render_template
+from flask import Flask, jsonify, render_template
 from sqlalchemy import Column, Integer, Text
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine,  or_
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql.expression import func
@@ -26,11 +26,25 @@ class Millionaire(Base):
     answer4 = Column(Text)
     background_information = Column(Text)
 
+    def serialize(self):
+        return {'id' : self.id,
+                'difficulty':  self.difficulty,
+                'question' : self.question}
 @app.route('/')
 def home():
-    m = db_session.query.filter(Millionaire.difficulty == 1).order_by(func.random()).first()
+    m = Millionaire.query.filter(Millionaire.difficulty == 1).order_by(func.random()).first()
     print(m.question)
     return m.question
+
+@app.route('/search/<string:needle>')
+def search(needle):
+    #or_ nicht vergessen zu importieren
+    res = Millionaire.query.filter(or_(Millionaire.question.contains(needle), Millionaire.correct_answer.contains(needle))) #kommt in einem der beiden Spalten ein bestimmter String vor
+    resA = []
+    for m in res:
+        print (type(m), m.serialize())
+        resA.append(m.serialize())
+    return jsonify(resA) #Schreibe das Ergebnis als
 
 
 @app.teardown_appcontext
