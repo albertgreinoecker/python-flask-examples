@@ -1,0 +1,22 @@
+<!doctype html>
+<html>
+ <body>
+  <h1>Was noch alles möglich ist....</h1>
+  <h3>Scatter-Plot</h3>
+  <div id='chart_iris' class='chart'  style="width:100%;height:1000px"></div>
+
+  <h3>Balkendiagramm</h3>
+  <div id='chart_medal' class='chart'  style="width:100%;height:1000px"></div>
+
+ </body>
+
+ <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+ <script type='text/javascript'>
+  var graphs_iris = {{iris | safe}};
+  Plotly.plot('chart_iris',graphs_iris,{});
+
+  var graphs_medal = {{medal | safe}};
+  Plotly.plot('chart_medal',graphs_medal,{});
+
+</script>
+</html>

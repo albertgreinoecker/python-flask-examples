@@ -8,3 +8,6 @@ flask-mqtt==1.1.1
 flask-socketio==5.1.1
 eventlet==0.33.0
 Flask-Bootstrap==3.3.7.1
+plotly==5.7.0
+plotly.express==0.4.1
+pandas==1.4.0
