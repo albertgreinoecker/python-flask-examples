@@ -10,7 +10,7 @@ Base = declarative_base()  # Basisklasse aller in SQLAlchemy verwendeten Klassen
 metadata = Base.metadata
 
 engine = create_engine('sqlite:////home/albert/tmp/millionaire.sqlite3')
-db_session = scoped_session(sessionmaker(autocommit=True, autoflush=True, bind=engine))
+db_session = scoped_session(sessionmaker(autoflush=True, bind=engine))
 Base.query = db_session.query_property() #Dadurch hat jedes Base - Objekt (also auch ein Millionaire) ein Attribut query für Abfragen
 app = Flask(__name__) #Die Flask-Anwendung
 
