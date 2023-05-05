@@ -12,7 +12,7 @@ Base = declarative_base()  # Basisklasse aller in SQLAlchemy verwendeten Klassen
 metadata = Base.metadata
 
 engine = create_engine('sqlite:////home/albert/tmp/geoinfo.sqlite3') #Welche Datenbank wird verwendet
-db_session = scoped_session(sessionmaker(autocommit=True, autoflush=True, bind=engine))
+db_session = scoped_session(sessionmaker(autoflush=True, bind=engine))
 Base.query = db_session.query_property() #Dadurch hat jedes Base - Objekt (also auch ein GeoInfo) ein Attribut query für Abfragen
 app = Flask(__name__) #Die Flask-Anwendung
 api = Api(app) #Die Flask API
@@ -45,6 +45,7 @@ class GeoInfoREST(Resource):
         info = GeoInfo(name=data['name'], long=data['long'], lat=data['lat'], message=data['message'])
         db_session.add(info)
         db_session.flush()
+        db_session.commit()
         return jsonify(info)
     def delete(self,id):
         info = GeoInfo.query.get(id)
