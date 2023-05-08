@@ -8,14 +8,11 @@ from flask_restful import Resource, Api
 from dataclasses import dataclass
 import json
 
-app = Flask(__name__) #Die Flask-Anwendung
-api = Api(app) #Die Flask API
-
 Base = declarative_base()  # Basisklasse aller in SQLAlchemy verwendeten Klassen
 metadata = Base.metadata
 
 engine = create_engine('sqlite:////home/albert/tmp/binary_metadata.sqlite3') #Welche Datenbank wird verwendet
-db_session = scoped_session(sessionmaker(autocommit=True, autoflush=True, bind=engine))
+db_session = scoped_session(sessionmaker(autoflush=True, bind=engine))
 Base.query = db_session.query_property() #Dadurch hat jedes Base - Objekt (also auch ein GeoInfo) ein Attribut query für Abfragen
 app = Flask(__name__) #Die Flask-Anwendung
 api = Api(app) #Die Flask API
