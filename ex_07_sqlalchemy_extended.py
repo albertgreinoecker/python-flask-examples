@@ -3,7 +3,7 @@ from flask import Flask, jsonify, render_template
 from sqlalchemy import Column, Integer, String, create_engine,  or_, ForeignKey, Table
 from sqlalchemy.orm import scoped_session, sessionmaker,relationship
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.sql.expression import func
+#from sqlalchemy.sql.expression import func
 from dataclasses import dataclass
 
 Base = declarative_base()  # Basisklasse aller in SQLAlchemy verwendeten Klassen
