@@ -43,6 +43,7 @@ class GeoInfoREST(Resource):
         data = request.get_json(force=True)['info']
         print(data)
         info = GeoInfo(name=data['name'], long=data['long'], lat=data['lat'], message=data['message'])
+        db_session.begin()
         db_session.add(info)
         db_session.flush()
         db_session.commit()
