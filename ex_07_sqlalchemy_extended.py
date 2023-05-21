@@ -1,6 +1,6 @@
 # Declarative-Variante wird hier benutzt
 from flask import Flask, jsonify, render_template
-from sqlalchemy import Column, Integer, String, create_engine,  or_, ForeignKey, Table
+from sqlalchemy import Column, Integer, String, create_engine,  or_, ForeignKey, Table, select
 from sqlalchemy.orm import scoped_session, sessionmaker,relationship
 from sqlalchemy.ext.declarative import declarative_base
 #from sqlalchemy.sql.expression import func
@@ -9,7 +9,7 @@ from dataclasses import dataclass
 Base = declarative_base()  # Basisklasse aller in SQLAlchemy verwendeten Klassen
 metadata = Base.metadata
 
-engine = create_engine('sqlite:///data/uni.sqlite')
+engine = create_engine('sqlite:///data/uni.sqlite',  echo=True)
 db_session = scoped_session(sessionmaker(autoflush=True, bind=engine))
 Base.query = db_session.query_property() #Dadurch hat jedes Base - Objekt (also auch ein Millionaire) ein Attribut query für Abfragen
 app = Flask(__name__) #Die Flask-Anwendung
@@ -20,12 +20,13 @@ class Assistenten(Base):
     PerslNr:int
     Name:str
     Fachgebiet:str
+    professor_boss: object
 
     PerslNr = Column(Integer, primary_key=True)
     Name = Column(String(100), nullable=False)
     Fachgebiet = Column(String(100), nullable=False)
-    Boss = Column(Integer, nullable=False)
-
+    Boss = Column(Integer, ForeignKey('Professoren.PersNr'), nullable=False)
+    professor_boss = relationship("Professoren", back_populates="assistenten")
 @dataclass
 class Professoren(Base):
     __tablename__ = 'Professoren'
@@ -41,6 +42,7 @@ class Professoren(Base):
     Rang = Column(String(100))
     Raum = Column(String(100))
     vorlesungen = relationship("Vorlesungen", back_populates="professor")
+    assistenten =  relationship("Assistenten", back_populates="professor_boss")
 
 hoeren = Table('hoeren',
     Base.metadata,
@@ -80,24 +82,18 @@ class Vorlesungen(Base):
     studenten = relationship('Studenten', secondary=hoeren, backref='vorlesungen')
 
 
-
-# class hoeren(Base):
-#     __tablename__ = 'hoeren'
-#
-#     id = Column(Integer, primary_key=True) #just a (non existing) dummy column
-#
-#     MatrNr = Column(Integer, ForeignKey('Studenten.MatrNr'), nullable=False),
-#     student = relationship("MatrNr", back_populates="hoeren")
-#
-#     VorlNr = Column(Integer, ForeignKey('Vorlesungen.VorlNr'), nullable=False)
-#
-
-
 @app.route('/')
 def home():
     s = Studenten.query.all()
     print(s)
     return jsonify(s)
+
+@app.route('/assistenten')
+def assistenten():
+    res = Assistenten.query.all()
+    return jsonify(res)
+
+
 
 @app.route('/professoren')
 def professoren():
@@ -120,6 +116,22 @@ def studenten():
     #     print(r.professor.Name)
     return jsonify(res)
 
+@app.route('/queries')
+def queries():
+    res = Studenten.query.order_by(Studenten.Name).limit(3).all(); #sortiere nach dem Namen und hole die ersten 3
+    for r in res:
+        print(r.Name)
+
+
+    # See Examples : https://docs.sqlalchemy.org/en/14/orm/quickstart.html#simple-select
+    # and: https://docs.sqlalchemy.org/en/14/tutorial/data_select.html
+    stmt = select(Studenten).where(Studenten.Semester >= 12)
+    res = []
+    for x in db_session.scalars(stmt):
+        res.append({'Name' : x.Name, 'Semester' : x.Semester})
+
+    return jsonify(res)
+
 
 
 @app.teardown_appcontext
@@ -133,6 +145,6 @@ def init_db():
 
 if __name__ == '__main__':
     init_db()
-    app.run(debug=True)
+    app.run(debug=True, port=5001)
 
 
