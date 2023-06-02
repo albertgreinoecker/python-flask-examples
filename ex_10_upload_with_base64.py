@@ -46,6 +46,7 @@ class BinaryWithMetadataREST(Resource):
         info = BinaryWithMetadata(name=d['name'], ext=d['ext'], data=d['data'], desc=d['desc'])
         db_session.add(info)
         db_session.flush()
+        db_session.commit()
         return jsonify(info)
 api.add_resource(BinaryWithMetadataREST, '/img_meta/<int:id>')
 
@@ -61,4 +62,4 @@ def init_db():
 
 if __name__ == '__main__':
     init_db()
-    app.run(debug=True)
+    app.run(debug=True, port="5001")
