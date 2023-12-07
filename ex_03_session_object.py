@@ -26,19 +26,17 @@ class Question:
 
 @app.route('/question')
 @app.route('/question/<int:correct>')
-def home(correct = 0):
+def question(correct = 0):
     feedback = ''
     if 'question' in session:
-        print(1)
         if session['question'].correct == correct:
             feedback = 'correct!'
         else:
             feedback = 'wrong'
         session['question'] =  Question('Q2', 1, ['E','F','G','H'], 1)
     else: # Neue Session zum Starten
-        print(2)
         session['question'] = Question('Q1', 0, ['A','B','C','D'], 3)
     return render_template('03_session_object.html', feedback=feedback, question= session['question'])
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=5001)
