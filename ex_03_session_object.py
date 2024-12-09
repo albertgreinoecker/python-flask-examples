@@ -1,5 +1,6 @@
 from flask import Flask, render_template, session, jsonify
 from flask_session import Session  # new style
+
 '''
 Möchte man z.B.: Objekte in der Session speichern, gibt es bei der normalen Verwendung ein Problem, 
 weil Flask die Session Info als JSON-String (verschlüsselt!) in einem Cookie speichert. 

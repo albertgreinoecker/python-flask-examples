@@ -1,7 +1,7 @@
 requests
 Flask
 Flask-RESTful
-Flask-Session
+Flask-Session2
 Flask-SQLAlchemy
 dataclasses
 flask-mqtt

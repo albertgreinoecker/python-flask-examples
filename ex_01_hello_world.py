@@ -20,9 +20,5 @@ def name(name):
 def add(op1, op2):
     return str(op1 + op2)  #Dieser Text wird direkt auf der Website angezeigt
 
-
-
-
-
 if __name__ == '__main__':
     app.run() #Startet den Server
